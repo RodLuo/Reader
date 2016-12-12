@@ -388,12 +388,12 @@
 					}
 					var getFictionInfoPromise = function(){
 						return new promise(function(resolve,reject){
-						$.get('data/chapter.json',function(data)){
+						$.get('data/chapter.json',function(data){
 							if(data.result == 0){
 								Chapter_id = data.chapter[2].chapter_id;
 
 							}
-						}
+						})
 					}) ;};
 					//获得章节的内容
 					var getCurChapterContent = function(chapter_id,callback){
@@ -406,18 +406,18 @@
 								}
 						},'json')
 					}
-					var getCurChapterContentPromise = new promise(function(resolve,reject){
-						$.get('data/data'+chapter_id+'.json',function(data){
-								if(data.result == 0){
-									var url = data.jsonp;
-									Util.getBSONP(url,function(data){
-										resolve(data);
-									});
-								}else{
-									reject({msg:'fail'});
-								}
-						},'json')
-					}) ;
+					// var getCurChapterContentPromise = new promise(function(resolve,reject){
+					// 	$.get('data/data'+chapter_id+'.json',function(data){
+					// 			if(data.result == 0){
+					// 				var url = data.jsonp;
+					// 				Util.getBSONP(url,function(data){
+					// 					resolve(data);
+					// 				});
+					// 			}else{
+					// 				reject({msg:'fail'});
+					// 			}
+					// 	},'json')
+					// }) ;
 					var prevChapter = function(UIcallback){
 						Chapter_id = parseInt(Chapter_id,10);
 						if(Chapter_id == 0){
