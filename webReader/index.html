@@ -311,6 +311,7 @@
 		<script src="js/jquery.jsonp.js"></script>
 		<script>
 			(function(){
+				'use strict';   //必须严格声明才能使用 es6的方法
 				var Util = (function(){
 					var prefix = 'html5_reader_';
 					var StorageGetter = function(key){
@@ -385,7 +386,15 @@
 							callback && callback();
 						},'json');
 					}
+					var getFictionInfoPromise = function(){
+						return new promise(function(resolve,reject){
+						$.get('data/chapter.json',function(data)){
+							if(data.result == 0){
+								Chapter_id = data.chapter[2].chapter_id;
 
+							}
+						}
+					}) ;};
 					//获得章节的内容
 					var getCurChapterContent = function(chapter_id,callback){
 						$.get('data/data'+chapter_id+'.json',function(data){
@@ -397,6 +406,18 @@
 								}
 						},'json')
 					}
+					var getCurChapterContentPromise = new promise(function(resolve,reject){
+						$.get('data/data'+chapter_id+'.json',function(data){
+								if(data.result == 0){
+									var url = data.jsonp;
+									Util.getBSONP(url,function(data){
+										resolve(data);
+									});
+								}else{
+									reject({msg:'fail'});
+								}
+						},'json')
+					}) ;
 					var prevChapter = function(UIcallback){
 						Chapter_id = parseInt(Chapter_id,10);
 						if(Chapter_id == 0){
@@ -494,11 +515,13 @@
 						readerModel.prevChapter(function(data){
 							readerUI(data);
 						})
+						$(window).scrollTop(0);
 					});
 					$("#next_button").click(function(){
 						readerModel.nextChapter(function(data){
 							readerUI(data);
 						})
+						$(window).scrollTop(0);
 					});
 				}
 
